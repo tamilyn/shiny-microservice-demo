@@ -13,7 +13,8 @@ networks:
 
 services:
   shiny-openldap:
-    image: scottcame/shiny-openldap
+    #image: scottcame/shiny-openldap
+    build: ./shiny-openldap
     container_name: shiny-openldap
     networks:
       - "shiny-demo"
@@ -25,14 +26,16 @@ services:
     environment:
       - SLAPD_DOMAIN=ldap.localhost.localdomain
   shiny-idp:
-    image: scottcame/shiny-idp
+    #image: scottcame/shiny-idp
+    build: ./shiny-idp
     container_name: shiny-idp
     networks:
       - "shiny-demo"
     depends_on:
       - shiny-openldap
   shiny-apache-shib-sp:
-    image: scottcame/shiny-apache-shib-sp
+    #image: scottcame/shiny-apache-shib-sp
+    build: ./shiny-apache-shib-sp
     container_name: shiny-apache-shib-sp
     networks:
       - "shiny-demo"
@@ -40,14 +43,24 @@ services:
       - "80:80"
       - "443:443"
   shiny:
-    image: scottcame/shiny
+    #image: scottcame/shiny
+    build: ./shiny
     container_name: shiny
     networks:
       - "shiny-demo"
     ports:
       - "3838:3838"
+  rstudio:
+    #image: scottcame/tidyverse-mariadb
+    build: ./tidyverse-mariadb
+    container_name: rstudio
+    networks:
+      - "shiny-demo"
+    ports:
+      - 8787:8787
   demo-mariadb:
-    image: scottcame/demo-mariadb
+    build: ./demo-mariadb
+    #image: scottcame/demo-mariadb
     container_name: demo-mariadb
     networks:
       - "shiny-demo"
